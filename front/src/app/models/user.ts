@@ -1,5 +1,5 @@
 export interface SafeUser {
-  id: string;
+  id: number;
   email: string;
   role: UserRole;
   isVerified?: boolean;

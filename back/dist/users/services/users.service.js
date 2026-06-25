@@ -251,6 +251,7 @@ let UsersService = class UsersService {
                 id: user.id,
                 email: user.email,
                 role: user.role,
+                isVerified: user.isVerified,
                 createdAt: user.createdAt,
             },
         };

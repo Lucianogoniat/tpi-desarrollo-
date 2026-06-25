@@ -11,24 +11,24 @@ export declare class UsersService {
     private readonly emailService;
     constructor(usersRepo: Repository<UserEntity>, jwtService: JwtService, cfg: ConfigService, emailService: EmailService);
     findAll(): Promise<Pick<UserEntity, 'id' | 'email' | 'role' | 'createdAt'>[]>;
-    findOneById(id: string): Promise<UserEntity>;
-    updateRole(id: string, role: UserRole, currentUserId: string): Promise<Pick<UserEntity, 'id' | 'email' | 'role' | 'createdAt'>>;
-    updateMyPassword(id: string, currentPassword: string, newPassword: string): Promise<{
+    findOneById(id: number): Promise<UserEntity>;
+    updateRole(id: number, role: UserRole, currentUserId: number): Promise<Pick<UserEntity, 'id' | 'email' | 'role' | 'createdAt'>>;
+    updateMyPassword(id: number, currentPassword: string, newPassword: string): Promise<{
         message: string;
     }>;
-    updateMyEmail(id: string, newEmail: string, password: string): Promise<{
+    updateMyEmail(id: number, newEmail: string, password: string): Promise<{
         message: string;
     }>;
-    deleteMyAccount(id: string, password: string): Promise<Omit<UserEntity, 'passwordHash'>>;
+    deleteMyAccount(id: number, password: string): Promise<Omit<UserEntity, 'passwordHash'>>;
     register(email: string, plainPassword: string): Promise<{
-        id: string;
+        id: number;
         email: string;
         role: UserRole;
         isVerified: boolean;
         createdAt: Date;
         access_token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             role: UserRole;
             isVerified: boolean;
@@ -44,15 +44,16 @@ export declare class UsersService {
     resetPassword(token: string, plainPassword: string): Promise<{
         message: string;
     }>;
-    resendVerification(userId: string): Promise<{
+    resendVerification(userId: number): Promise<{
         message: string;
     }>;
     login(email: string, plainPassword: string): Promise<{
         access_token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             role: UserRole;
+            isVerified: boolean;
             createdAt: Date;
         };
     }>;

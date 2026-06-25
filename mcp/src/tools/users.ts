@@ -2,7 +2,13 @@ import { z } from 'zod';
 import { api } from '../api-client';
 import type { ToolDef } from '../tool-factory';
 
-const userId = z.string().uuid();
+const userId = z.preprocess((val) => {
+  if (typeof val === 'string') {
+    const num = Number(val);
+    return isNaN(num) ? val : num;
+  }
+  return val;
+}, z.number().int().positive());
 
 export default [
   {
@@ -14,7 +20,7 @@ export default [
     name: 'update_user_role',
     description: 'Cambia el rol de un usuario. Requiere rol admin',
     inputSchema: { id: userId, role: z.enum(['user', 'admin']) },
-    handler: async ({ id, role }: { id: string; role: 'user' | 'admin' }) =>
+    handler: async ({ id, role }: { id: number; role: 'user' | 'admin' }) =>
       api.patch(`/users/${id}/role`, { role }),
   },
   {

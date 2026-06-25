@@ -8,6 +8,7 @@ import {
 	Req,
 	Patch,
 	Delete,
+	ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -85,23 +86,8 @@ export class UsersController {
 		return this.usersService.findAll();
 	}
 
-	@Get(':id')
-	@UseGuards(JwtAuthGuard)
-	findOne(@Param('id') id: string) {
-		return this.usersService.findOneById(id);
-	}
-
-	@Patch(':id/role')
-	@UseGuards(JwtAuthGuard, RolesGuard)
-	@Roles(UserRole.ADMIN)
-	updateRole(
-		@Param('id') id: string,
-		@Body() body: UpdateRoleInput,
-		@Req() req: any,
-	) {
-		return this.usersService.updateRole(id, body.role, req.user.id);
-	}
-
+	// Static 'me' routes MUST come before ':id' to prevent NestJS
+	// from matching 'me' as a parameter value.
 	@Patch('me/password')
 	@UseGuards(JwtAuthGuard)
 	updateMyPassword(
@@ -132,5 +118,22 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard)
 	deleteMyAccount(@Req() req: any, @Body() body: DeleteAccountInput) {
 		return this.usersService.deleteMyAccount(req.user.id, body.password);
+	}
+
+	@Get(':id')
+	@UseGuards(JwtAuthGuard)
+	findOne(@Param('id', ParseIntPipe) id: number) {
+		return this.usersService.findOneById(id);
+	}
+
+	@Patch(':id/role')
+	@UseGuards(JwtAuthGuard, RolesGuard)
+	@Roles(UserRole.ADMIN)
+	updateRole(
+		@Param('id', ParseIntPipe) id: number,
+		@Body() body: UpdateRoleInput,
+		@Req() req: any,
+	) {
+		return this.usersService.updateRole(id, body.role, req.user.id);
 	}
 }

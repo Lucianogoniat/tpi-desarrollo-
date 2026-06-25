@@ -28,7 +28,7 @@ export class AdminUsersPage implements OnInit {
     }
   }
 
-  async changeRole(userId: string, role: UserRole): Promise<void> {
+  async changeRole(userId: number, role: UserRole): Promise<void> {
     try {
       const updated = await firstValueFrom(this.usersService.updateRole(userId, { role }));
       this.users.update((users) =>

@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRole } from './user-role.enum';
 @Entity('users')
 export class UserEntity {
-	@PrimaryGeneratedColumn('uuid')
-	id!: string;
+	@PrimaryGeneratedColumn()
+	id!: number;
 	@Column({ unique: true })
 	email!: string;
 	@Column({ select: false })

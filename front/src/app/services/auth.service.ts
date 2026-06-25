@@ -102,6 +102,7 @@ export class AuthService {
       localStorage.setItem(this.tokenKey, res.access_token);
       this.token.set(res.access_token);
       this.user.set(res.user);
+      this.userLoaded.set(true);
     }
   }
 }

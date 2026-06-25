@@ -1,6 +1,12 @@
 import { z } from 'zod';
 import { api } from '../api-client';
-const userId = z.string().uuid();
+const userId = z.preprocess((val) => {
+    if (typeof val === 'string') {
+        const num = Number(val);
+        return isNaN(num) ? val : num;
+    }
+    return val;
+}, z.number().int().positive());
 export default [
     {
         name: 'list_users',

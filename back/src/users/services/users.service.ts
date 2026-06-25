@@ -37,7 +37,7 @@ export class UsersService {
 		});
 	}
 
-	async findOneById(id: string): Promise<UserEntity> {
+	async findOneById(id: number): Promise<UserEntity> {
 		const user = await this.usersRepo.findOne({ where: { id } });
 		if (!user)
 			throw new NotFoundException(`Usuario con id ${id} no encontrado`);
@@ -45,9 +45,9 @@ export class UsersService {
 	}
 
 	async updateRole(
-		id: string,
+		id: number,
 		role: UserRole,
-		currentUserId: string,
+		currentUserId: number,
 	): Promise<Pick<UserEntity, 'id' | 'email' | 'role' | 'createdAt'>> {
 		if (id === currentUserId) {
 			throw new ForbiddenException('Cannot change your own role');
@@ -74,7 +74,7 @@ export class UsersService {
 	}
 
 	async updateMyPassword(
-		id: string,
+		id: number,
 		currentPassword: string,
 		newPassword: string,
 	): Promise<{ message: string }> {
@@ -95,7 +95,7 @@ export class UsersService {
 	}
 
 	async updateMyEmail(
-		id: string,
+		id: number,
 		newEmail: string,
 		password: string,
 	): Promise<{ message: string }> {
@@ -121,7 +121,7 @@ export class UsersService {
 	}
 
 	async deleteMyAccount(
-		id: string,
+		id: number,
 		password: string,
 	): Promise<Omit<UserEntity, 'passwordHash'>> {
 		const user = await this.usersRepo
@@ -251,7 +251,7 @@ export class UsersService {
 		return { message: 'Contraseña actualizada' };
 	}
 
-	async resendVerification(userId: string) {
+	async resendVerification(userId: number) {
 		const user = await this.usersRepo.findOne({ where: { id: userId } });
 		if (!user) {
 			throw new NotFoundException('Usuario no encontrado');
@@ -292,6 +292,7 @@ export class UsersService {
 				id: user.id,
 				email: user.email,
 				role: user.role,
+				isVerified: user.isVerified,
 				createdAt: user.createdAt,
 			},
 		};

@@ -9,9 +9,9 @@ export declare class JwtStrategy extends JwtStrategy_base {
     private readonly usersRepo;
     constructor(cfg: ConfigService, usersRepo: Repository<UserEntity>);
     validate(payload: {
-        sub: string;
+        sub: string | number;
     }): Promise<{
-        id: string;
+        id: number;
         email: string;
         role: import("../../users/user-role.enum").UserRole;
     }>;

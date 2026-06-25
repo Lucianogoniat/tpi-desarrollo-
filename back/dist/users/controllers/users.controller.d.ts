@@ -6,14 +6,14 @@ export declare class AuthController {
     private readonly usersService;
     constructor(usersService: UsersService);
     register(body: RegisterInput): Promise<{
-        id: string;
+        id: number;
         email: string;
         role: UserRole;
         isVerified: boolean;
         createdAt: Date;
         access_token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             role: UserRole;
             isVerified: boolean;
@@ -23,9 +23,10 @@ export declare class AuthController {
     login(body: LoginInput): Promise<{
         access_token: string;
         user: {
-            id: string;
+            id: number;
             email: string;
             role: UserRole;
+            isVerified: boolean;
             createdAt: Date;
         };
     }>;
@@ -42,7 +43,7 @@ export declare class AuthController {
         message: string;
     }>;
     findMe(req: any): Promise<{
-        id: string;
+        id: number;
         email: string;
         isVerified: boolean;
         verificationToken?: string | null;
@@ -56,8 +57,6 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     findAll(): Promise<Pick<import("../user.entity").UserEntity, "id" | "email" | "role" | "createdAt">[]>;
-    findOne(id: string): Promise<import("../user.entity").UserEntity>;
-    updateRole(id: string, body: UpdateRoleInput, req: any): Promise<Pick<import("../user.entity").UserEntity, "id" | "email" | "role" | "createdAt">>;
     updateMyPassword(req: any, body: UpdatePasswordInput): Promise<{
         message: string;
     }>;
@@ -65,4 +64,6 @@ export declare class UsersController {
         message: string;
     }>;
     deleteMyAccount(req: any, body: DeleteAccountInput): Promise<Omit<import("../user.entity").UserEntity, "passwordHash">>;
+    findOne(id: number): Promise<import("../user.entity").UserEntity>;
+    updateRole(id: number, body: UpdateRoleInput, req: any): Promise<Pick<import("../user.entity").UserEntity, "id" | "email" | "role" | "createdAt">>;
 }

@@ -14,7 +14,7 @@ export class UsersService {
     return this.http.get<SafeUser[]>(`${this.api}/users`);
   }
 
-  updateRole(id: string, dto: UpdateUserRoleDto): Observable<SafeUser> {
+  updateRole(id: number, dto: UpdateUserRoleDto): Observable<SafeUser> {
     return this.http.patch<SafeUser>(`${this.api}/users/${id}/role`, dto);
   }
 

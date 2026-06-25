@@ -36,8 +36,19 @@ let EmailService = class EmailService {
         const from = this.cfg.get('EMAIL_FROM') ??
             'TPI Desarrollo <no-reply@example.com>';
         if (mode === 'test') {
-            const transporter = nodemailer.createTransport({ jsonTransport: true });
-            await transporter.sendMail({ from, to, subject, html });
+            const testAccount = await nodemailer.createTestAccount();
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: testAccount.user,
+                    pass: testAccount.pass,
+                },
+            });
+            const info = await transporter.sendMail({ from, to, subject, html });
+            const previewUrl = nodemailer.getTestMessageUrl(info);
+            console.log(`📧 Email enviado (Ethereal preview): ${previewUrl}`);
             return;
         }
         const host = this.cfg.get('EMAIL_HOST');

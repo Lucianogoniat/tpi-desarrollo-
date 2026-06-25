@@ -4,7 +4,7 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailService {
-	constructor(private readonly cfg: ConfigService) {}
+	constructor(private readonly cfg: ConfigService) { }
 
 	async sendVerification(email: string, token: string): Promise<void> {
 		const baseUrl =
@@ -33,8 +33,6 @@ export class EmailService {
 	}
 
 	private async send(to: string, subject: string, html: string): Promise<void> {
-		// En desarrollo local simulamos el envío para que la API sea ejecutable
-		// sin credenciales SMTP. Producción sigue exigiendo una configuración real.
 		const mode =
 			this.cfg.get<string>('EMAIL_MODE') ??
 			(process.env.NODE_ENV === 'production' ? 'smtp' : 'test');
@@ -43,8 +41,20 @@ export class EmailService {
 			'TPI Desarrollo <no-reply@example.com>';
 
 		if (mode === 'test') {
-			const transporter = nodemailer.createTransport({ jsonTransport: true });
-			await transporter.sendMail({ from, to, subject, html });
+			const testAccount = await nodemailer.createTestAccount();
+			const transporter = nodemailer.createTransport({
+				host: 'smtp.ethereal.email',
+				port: 587,
+				secure: false,
+				auth: {
+					user: testAccount.user,
+					pass: testAccount.pass,
+				},
+			});
+
+			const info = await transporter.sendMail({ from, to, subject, html });
+			const previewUrl = nodemailer.getTestMessageUrl(info);
+			console.log(`📧 Email enviado (Ethereal preview): ${previewUrl}`);
 			return;
 		}
 

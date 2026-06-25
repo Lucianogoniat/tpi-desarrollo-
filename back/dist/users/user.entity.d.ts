@@ -1,6 +1,6 @@
 import { UserRole } from './user-role.enum';
 export declare class UserEntity {
-    id: string;
+    id: number;
     email: string;
     passwordHash: string;
     isVerified: boolean;

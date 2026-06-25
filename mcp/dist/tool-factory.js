@@ -6,8 +6,9 @@ export function registerToolSet(server, tools) {
                 return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
             }
             catch (err) {
+                console.error("[MCP TOOL ERROR]", err);
                 return {
-                    content: [{ type: "text", text: `Error: ${err.response?.data?.message || err.message}` }],
+                    content: [{ type: "text", text: `Error: ${err.response?.data?.message || err.message || String(err)}` }],
                     isError: true,
                 };
             }

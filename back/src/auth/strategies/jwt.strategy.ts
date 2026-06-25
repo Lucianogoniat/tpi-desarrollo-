@@ -20,8 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 		});
 	}
 
-	async validate(payload: { sub: string }) {
-		const user = await this.usersRepo.findOne({ where: { id: payload.sub } });
+	async validate(payload: { sub: string | number }) {
+		const user = await this.usersRepo.findOne({ where: { id: Number(payload.sub) } });
 		if (!user) throw new UnauthorizedException();
 		return { id: user.id, email: user.email, role: user.role };
 		// este objeto queda disponible como req.user en los guards y controllers

@@ -7,7 +7,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-        @if (auth.isAuthenticated()) {
+        @if (auth.isAuthenticated() && auth.user()?.isVerified !== false) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
               <i class="bi bi-house me-1"></i>Inicio
