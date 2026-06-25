@@ -1,0 +1,33 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4 text-center">
+        <div class="mb-4">
+          <i class="bi bi-envelope-open-check display-4" style="color: var(--primary)"></i>
+          <h3 class="mt-3 fw-bold">Verificación de email</h3>
+        </div>
+
+        @if (loading()) {
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="mt-3 text-muted">Verificando token...</p>
+        } @else {
+          @if (success()) {
+            <p class="text-success fw-medium fs-5">Email verificado correctamente.</p>
+            <button class="btn btn-primary w-100" (click)="goLogin()">
+              Ir a iniciar sesión
+            </button>
+          } @else {
+            <p class="text-danger fw-medium fs-5">No se pudo verificar el email.</p>
+            <p class="text-muted">Iniciá sesión para solicitar un nuevo enlace de verificación.</p>
+            <button class="btn btn-outline-primary w-100 mb-2" (click)="resendEmail()">
+              Reenviar email
+            </button>
+            <button class="btn btn-secondary w-100" (click)="goLogin()">
+              Ir a iniciar sesión
+            </button>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>

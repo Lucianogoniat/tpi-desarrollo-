@@ -1,0 +1,129 @@
+<div class="row justify-content-center mt-4">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        @if (auth.user(); as user) {
+          <div class="text-center mb-4">
+            <i class="bi bi-person-circle display-4" style="color: var(--primary)"></i>
+            <h3 class="mt-2 fw-bold">Mi perfil</h3>
+          </div>
+
+          <table class="table table-borderless mb-0">
+            <tbody>
+              <tr>
+                <th class="ps-0" style="width: 120px">ID</th>
+                <td><code>{{ user.id }}</code></td>
+              </tr>
+              <tr>
+                <th class="ps-0">Email</th>
+                <td><i class="bi bi-envelope me-1 text-muted"></i>{{ user.email }}</td>
+              </tr>
+              <tr>
+                <th class="ps-0">Estado</th>
+                <td>
+                  @if (user.isVerified) {
+                    <span class="badge bg-success">
+                      <i class="bi bi-check-circle me-1"></i>Verificado
+                    </span>
+                  } @else {
+                    <span class="badge bg-secondary">
+                      <i class="bi bi-x-circle me-1"></i>No verificado
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <th class="ps-0">Rol</th>
+                <td>
+                  @if (user.role === 'admin') {
+                    <span class="badge bg-warning text-dark">
+                      <i class="bi bi-shield-check me-1"></i>Administrador
+                    </span>
+                  } @else {
+                    <span class="badge bg-info">
+                      <i class="bi bi-person me-1"></i>Usuario
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <th class="ps-0">Registrado</th>
+                <td><i class="bi bi-calendar me-1 text-muted"></i>{{ user.createdAt | date:'medium' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          @if (auth.user()?.isVerified === false) {
+            <div class="alert alert-warning" role="alert">
+              Tu email no está verificado. Si ya recibiste el link, revisalo en tu casilla de correo.
+            </div>
+            <button
+              class="btn btn-outline-primary w-100 mb-3"
+              (click)="resendVerification()"
+              [disabled]="loading()"
+            >
+              @if (loading()) {
+                <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+              }
+              Reenviar email
+            </button>
+          }
+
+          <hr />
+
+          <h5 class="fw-bold mt-4">Cambiar contraseña</h5>
+          <form (ngSubmit)="changePassword()" #passwordForm="ngForm" class="mb-4">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">Contraseña actual</label>
+              <input id="currentPassword" type="password" class="form-control"
+                [(ngModel)]="currentPassword" name="currentPassword" required />
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">Nueva contraseña</label>
+              <input id="newPassword" type="password" class="form-control"
+                [(ngModel)]="newPassword" name="newPassword" required minlength="8" />
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+              <input id="confirmPassword" type="password" class="form-control"
+                [(ngModel)]="confirmPassword" name="confirmPassword" required minlength="8" />
+            </div>
+            <button class="btn btn-primary w-100" type="submit"
+              [disabled]="passwordForm.invalid || passwordLoading()">
+              Cambiar contraseña
+            </button>
+          </form>
+
+          <h5 class="fw-bold">Cambiar email</h5>
+          <form (ngSubmit)="changeEmail()" #emailForm="ngForm" class="mb-4">
+            <div class="mb-3">
+              <label for="newEmail" class="form-label">Nuevo email</label>
+              <input id="newEmail" type="email" class="form-control"
+                [(ngModel)]="newEmail" name="newEmail" required email />
+            </div>
+            <div class="mb-3">
+              <label for="emailPassword" class="form-label">Contraseña actual</label>
+              <input id="emailPassword" type="password" class="form-control"
+                [(ngModel)]="emailPassword" name="emailPassword" required />
+            </div>
+            <button class="btn btn-primary w-100" type="submit"
+              [disabled]="emailForm.invalid || emailLoading()">
+              Cambiar email
+            </button>
+          </form>
+
+          <button class="btn btn-danger w-100" (click)="auth.logout()">
+            <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
+          </button>
+        } @else {
+          <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2 text-muted">Cargando perfil...</p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
