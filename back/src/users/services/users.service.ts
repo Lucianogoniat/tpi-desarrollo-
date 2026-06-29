@@ -258,7 +258,7 @@ export class UsersService {
 		}
 
 		if (user.isVerified) {
-			throw new ConflictException('Email ya verificado');
+			return { message: 'Email ya verificado' };
 		}
 
 		const verificationToken = randomUUID();

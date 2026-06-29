@@ -8,6 +8,7 @@ import {
 	Req,
 	Patch,
 	Delete,
+	HttpCode,
 	ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
@@ -59,6 +60,7 @@ export class AuthController {
 	}
 
 	@Post('resend-verification')
+	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
 	resendVerification(@Req() req: any) {
 		return this.usersService.resendVerification(req.user.id);
