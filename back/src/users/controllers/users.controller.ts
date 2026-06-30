@@ -2,13 +2,11 @@ import {
 	Controller,
 	Get,
 	Param,
-	Post,
 	Body,
 	UseGuards,
 	Req,
 	Patch,
 	Delete,
-	HttpCode,
 	ParseIntPipe,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
@@ -22,64 +20,10 @@ import {
 	UpdatePasswordInput,
 	UpdateRoleInput,
 } from '../user-inputs';
-import {
-	ForgotPasswordInput,
-	LoginInput,
-	RegisterInput,
-	ResetPasswordInput,
-	VerifyEmailInput,
-} from '../../auth/auth.types';
-
-@Controller('auth')
-export class AuthController {
-	constructor(private readonly usersService: UsersService) {}
-
-	@Post('register')
-	register(@Body() body: RegisterInput) {
-		return this.usersService.register(body.email, body.password);
-	}
-
-	@Post('login')
-	login(@Body() body: LoginInput) {
-		return this.usersService.login(body.email, body.password);
-	}
-
-	@Post('verify-email')
-	verifyEmail(@Body() body: VerifyEmailInput) {
-		return this.usersService.verifyEmail(body.token);
-	}
-
-	@Post('forgot-password')
-	forgotPassword(@Body() body: ForgotPasswordInput) {
-		return this.usersService.forgotPassword(body.email);
-	}
-
-	@Post('reset-password')
-	resetPassword(@Body() body: ResetPasswordInput) {
-		return this.usersService.resetPassword(body.token, body.password);
-	}
-
-	@Post('resend-verification')
-	@HttpCode(200)
-	@UseGuards(JwtAuthGuard)
-	resendVerification(@Req() req: any) {
-		return this.usersService.resendVerification(req.user.id);
-	}
-
-	@Get('me')
-	@UseGuards(JwtAuthGuard)
-	async findMe(@Req() req: any) {
-		const userId = req.user.id;
-		const user = await this.usersService.findOneById(userId);
-		const { passwordHash, ...userWithoutPassword } = user;
-		return userWithoutPassword;
-	}
-}
-
 
 @Controller('users')
 export class UsersController {
-	constructor(private readonly usersService: UsersService) {}
+	constructor(private readonly usersService: UsersService) { }
 
 	@Get('')
 	@UseGuards(JwtAuthGuard, RolesGuard)
@@ -88,8 +32,7 @@ export class UsersController {
 		return this.usersService.findAll();
 	}
 
-	// Static 'me' routes MUST come before ':id' to prevent NestJS
-	// from matching 'me' as a parameter value.
+
 	@Patch('me/password')
 	@UseGuards(JwtAuthGuard)
 	updateMyPassword(

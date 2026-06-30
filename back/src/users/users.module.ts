@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
-import { AuthController, UsersController } from './controllers/users.controller';
+import { UsersController } from './controllers/users.controller';
+import { AuthController } from '../auth/auth.controller';
 import { JsonPlaceholderUsersGateway } from './gateways/jsonplaceholder-users.gateway';
 import { LocalUsersGateway } from './gateways/local-users.gateway';
 import { USERS_GATEWAY } from './gateways/users.gateway';

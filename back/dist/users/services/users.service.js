@@ -221,7 +221,7 @@ let UsersService = class UsersService {
             throw new common_1.NotFoundException('Usuario no encontrado');
         }
         if (user.isVerified) {
-            throw new common_1.ConflictException('Email ya verificado');
+            return { message: 'Email ya verificado' };
         }
         const verificationToken = (0, crypto_1.randomUUID)();
         user.verificationToken = verificationToken;

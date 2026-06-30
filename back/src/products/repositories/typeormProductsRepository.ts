@@ -16,7 +16,7 @@ export class TypeOrmProductsRepository implements ProductsRepository {
   constructor(
     @InjectRepository(ProductEntity)
     private repo: Repository<ProductEntity>,
-  ) {}
+  ) { }
 
   findAll(): Promise<Product[]> {
     return this.repo.find({ relations: ['category'] });
@@ -51,7 +51,6 @@ export class TypeOrmProductsRepository implements ProductsRepository {
     if (!entity) return undefined;
 
     await this.repo.remove(entity);
-    // Restore the id since TypeORM clears it after remove
     return { ...entity, id };
   }
 }

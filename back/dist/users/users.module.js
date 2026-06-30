@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
 const users_controller_1 = require("./controllers/users.controller");
+const auth_controller_1 = require("../auth/auth.controller");
 const jsonplaceholder_users_gateway_1 = require("./gateways/jsonplaceholder-users.gateway");
 const local_users_gateway_1 = require("./gateways/local-users.gateway");
 const users_gateway_1 = require("./gateways/users.gateway");
@@ -23,7 +24,7 @@ exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity]), auth_module_1.AuthModule],
-        controllers: [users_controller_1.AuthController, users_controller_1.UsersController],
+        controllers: [auth_controller_1.AuthController, users_controller_1.UsersController],
         providers: [
             users_service_1.UsersService,
             {
